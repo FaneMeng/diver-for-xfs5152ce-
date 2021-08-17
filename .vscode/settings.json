@@ -7,6 +7,7 @@
         "kmod.h": "c",
         "gfp.h": "c",
         "mmzone.h": "c",
-        "page-flags-layout.h": "c"
+        "page-flags-layout.h": "c",
+        "xfs5152reg.h": "c"
     }
 }
