@@ -405,9 +405,9 @@
 	#address-cells = <1>;
 	#size-cells = <0>; 
 
-	spidev@0 {
-		compatible = "spidev";
-		spi-max-frequency = <20000000>;
+	spidev0:xfs5152ce@0 {               /*@后面的0表示此SPI芯片接到哪个硬件片选上*/
+		compatible = "ccteg,xfs5152ce";
+		spi-max-frequency = <25000>;
 		reg = <0>;
 	};
 };
