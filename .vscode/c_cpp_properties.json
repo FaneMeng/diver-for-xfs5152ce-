@@ -1,0 +1,34 @@
+{
+    "configurations": [
+    
+    {
+    "name": "Linux",
+    
+    "includePath": [
+    
+    "Z:/linux-imx-rel_imx_4.1.15_2.1.0_ga/**",
+    
+    "Z:/linux-imx-rel_imx_4.1.15_2.1.0_ga/include",
+    
+    "Z:/linux-imx-rel_imx_4.1.15_2.1.0_ga/include/linux",
+    
+    "Z:/linux-imx-rel_imx_4.1.15_2.1.0_ga/arch/arm/include"
+    
+    ],
+    
+    "defines": [],
+    
+    
+    "cStandard": "c11",
+    
+    "cppStandard": "c++17",
+    
+    "intelliSenseMode": "clang-x64"
+    
+    }
+    
+    ],
+    
+    "version": 4
+    
+    }

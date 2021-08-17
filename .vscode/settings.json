@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "wait.h": "c",
+        "input.h": "c",
+        "interrupt.h": "c",
+        "module.h": "c",
+        "kmod.h": "c",
+        "gfp.h": "c",
+        "mmzone.h": "c",
+        "page-flags-layout.h": "c"
+    }
+}
