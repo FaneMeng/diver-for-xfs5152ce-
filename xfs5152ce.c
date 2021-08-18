@@ -164,7 +164,7 @@ static int xfs5152ce_remove(struct spi_device *spi)
 	/*注销设备号*/
 	unregister_chrdev_region(xfs5152cedev.devid,XFS5152CE_CNT);
 	/*摧毁设备节点*/
-	class_destroy(xfs5152cedev.class);
+	device_destroy(xfs5152cedev.class,xfs5152cedev.devid);
 	/*摧毁类*/
 	class_destroy(xfs5152cedev.class);
 	return ret;
