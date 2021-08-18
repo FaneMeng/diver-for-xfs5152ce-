@@ -35,6 +35,48 @@
 #include <asm/io.h>
 #include "xfs5152reg.h"
 
+#define XFS5152CE_MINOR_NUMBER 0 //次设备号
+#define XFS5152CE_CNT 1
+#define XFS5152CE_NAME "xfs5152ce"
+struct xfs5152ce_dev{
+	int major;
+	int minor;
+	dev_t devid;	  /*描述设备号的数据类型*/
+	struct cdev cdev; /*用cdev结构体来描述一个字符设备*/
+	struct class *class;
+	struct device *device;
+	void *priavte_data;
+};
+
+static struct xfs5152ce_dev xfs5152cedev;  //定义设备描述结构体
+
+static int xfs5152ce_open (struct inode *inode, struct file *filp)
+{
+
+}
+
+ssize_t xfs5152ce_read (struct file *flip, char __user *buf, size_t cnt, loff_t *off)
+{
+
+}
+
+ssize_t xfs5152ce_write (struct file *flip, const char __user *buf, size_t cnt, loff_t *off)
+{
+
+}
+
+static int xfs5152ce_release (struct inode *inode, struct file *filp)
+{
+
+}
+
+static const struct file_operations xfs5152ce_fops={
+	.owner = THIS_MODULE,
+	.open = xfs5152ce_open,
+	.read = xfs5152ce_read,
+	.write = xfs5152ce_write,
+	.release = xfs5152ce_release
+};
 
 
  /*
@@ -48,7 +90,65 @@ static int xfs5152ce_probe(struct spi_device *spi)
 {
 	int ret = 0;
 	printk("xfs5152ce_probe\r\n");
-	return ret;	
+
+	/*设备号获取*/
+	xfs5152cedev.major = 0;
+	if(xfs5152cedev.major) //由系统分配主设备号
+	{
+		xfs5152cedev.devid = MKDEV(xfs5152cedev.major,XFS5152CE_MINOR_NUMBER);//设备号合成
+		ret = register_chrdev_region(xfs5152cedev.devid, XFS5152CE_CNT, XFS5152CE_NAME);  //register a range of device numbers
+	}
+	else  //没有给定主设备号
+	{
+		ret = alloc_chrdev_region(&xfs5152cedev.devid, XFS5152CE_MINOR_NUMBER, XFS5152CE_CNT,XFS5152CE_NAME);
+		xfs5152cedev.major = MAJOR(xfs5152cedev.devid);
+		xfs5152cedev.minor = MINOR(xfs5152cedev.devid);
+	}
+	if(ret < 0)
+	{
+		printk("xfs5152ce chrdev_refion error!\r\n");
+		goto FAIL_DEVID;
+	}
+	printk("xfs5152ce major=%d, minor = %d\r\n",xfs5152cedev.major,xfs5152cedev.minor);
+
+	/*注册字符设备*/
+	xfs5152cedev.cdev.owner = THIS_MODULE;
+	cdev_init(&xfs5152cedev.cdev,&xfs5152ce_fops);
+	ret = cdev_add(&xfs5152cedev.cdev,xfs5152cedev.devid,XFS5152CE_CNT);
+	if(ret < 0)
+	{
+		printk("xfs5152ce cdev add error!\r\n");
+		goto FAIL_CDEV;
+	}
+
+	/*自动创建设备节点*/
+	xfs5152cedev.class = class_create(THIS_MODULE,XFS5152CE_NAME);
+	if(IS_ERR(xfs5152cedev.class))
+	{
+		ret = PTR_ERR(xfs5152cedev.class);
+		printk("xfs5152ce class create error!\r\n");
+		goto FAIL_CLASS;
+	}
+	xfs5152cedev.device = device_create(xfs5152cedev.class,NULL,xfs5152cedev.devid,NULL,XFS5152CE_NAME);
+	if(IS_ERR(xfs5152cedev.device))
+	{
+		ret = PTR_ERR(xfs5152cedev.device);
+		printk("xfs5152ce device node create error!\r\n");
+		goto FAIL_DEVICE;
+	}
+	/*私有数据，spi结构体*/
+	xfs5152cedev.priavte_data = spi;
+	return 0;	
+	
+FAIL_DEVICE:
+	class_destroy(xfs5152cedev.class);
+FAIL_CLASS:
+	cdev_del(&xfs5152cedev.cdev);
+FAIL_CDEV:
+	unregister_chrdev_region(xfs5152cedev.devid,XFS5152CE_CNT);
+FAIL_DEVID:
+	return ret;
+
 }
 
 /*
@@ -58,7 +158,16 @@ static int xfs5152ce_probe(struct spi_device *spi)
  */
 static int xfs5152ce_remove(struct spi_device *spi)
 {
-	return 0;
+	int ret = 0;
+	/*删除字符设备*/
+	cdev_del(&xfs5152cedev.cdev);
+	/*注销设备号*/
+	unregister_chrdev_region(xfs5152cedev.devid,XFS5152CE_CNT);
+	/*摧毁设备节点*/
+	class_destroy(xfs5152cedev.class);
+	/*摧毁类*/
+	class_destroy(xfs5152cedev.class);
+	return ret;
 	
 }
 

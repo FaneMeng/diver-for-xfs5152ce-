@@ -10,6 +10,9 @@
         "page-flags-layout.h": "c",
         "xfs5152reg.h": "c",
         "uaccess.h": "c",
-        "platform_device.h": "c"
+        "platform_device.h": "c",
+        "semaphore.h": "c",
+        "timer.h": "c",
+        "device.h": "c"
     }
 }
