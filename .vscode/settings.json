@@ -8,6 +8,8 @@
         "gfp.h": "c",
         "mmzone.h": "c",
         "page-flags-layout.h": "c",
-        "xfs5152reg.h": "c"
+        "xfs5152reg.h": "c",
+        "uaccess.h": "c",
+        "platform_device.h": "c"
     }
 }

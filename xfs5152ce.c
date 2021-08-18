@@ -46,7 +46,9 @@
   */	
 static int xfs5152ce_probe(struct spi_device *spi)
 {
-	
+	int ret = 0;
+	printk("xfs5152ce_probe\r\n");
+	return ret;	
 }
 
 /*
@@ -56,6 +58,7 @@ static int xfs5152ce_probe(struct spi_device *spi)
  */
 static int xfs5152ce_remove(struct spi_device *spi)
 {
+	return 0;
 	
 }
 
@@ -80,7 +83,7 @@ static struct spi_driver xfs5152ce_driver = {
 		   	.name = "xfs5152ce",
 		   	.of_match_table = xfs5152ce_of_match, 
 		   },
-	.id_table = xfs5152ce_id,
+	.id_table = xfs5152ce_id
 };
 		   
 /*
@@ -91,7 +94,8 @@ static struct spi_driver xfs5152ce_driver = {
 static int __init xfs5152ce_init(void)
 {
 	int ret = 0;
-	
+	ret = spi_register_driver(&xfs5152ce_driver);
+	return ret;
 	
 }
 
@@ -102,6 +106,7 @@ static int __init xfs5152ce_init(void)
  */
 static void __exit xfs5152ce_exit(void)
 {
+	spi_unregister_device(&xfs5152ce_driver);
 	
 }
 

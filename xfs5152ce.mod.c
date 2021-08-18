@@ -18,6 +18,9 @@ static const struct modversion_info ____versions[]
 __used
 __attribute__((section("__versions"))) = {
 	{ 0xfa985410, __VMLINUX_SYMBOL_STR(module_layout) },
+	{ 0x99fb9778, __VMLINUX_SYMBOL_STR(device_unregister) },
+	{ 0x34ce7e95, __VMLINUX_SYMBOL_STR(spi_register_driver) },
+	{ 0x27e1a049, __VMLINUX_SYMBOL_STR(printk) },
 	{ 0xefd6cf06, __VMLINUX_SYMBOL_STR(__aeabi_unwind_cpp_pr0) },
 };
 
@@ -27,4 +30,4 @@ __attribute__((section(".modinfo"))) =
 "depends=";
 
 
-MODULE_INFO(srcversion, "EB0C8818A7B6A3E004D6213");
+MODULE_INFO(srcversion, "96A7CC4D9D0E30B50BBE9D2");
