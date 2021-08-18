@@ -52,22 +52,24 @@ static struct xfs5152ce_dev xfs5152cedev;  //定义设备描述结构体
 
 static int xfs5152ce_open (struct inode *inode, struct file *filp)
 {
+	return 0;
 
 }
 
 ssize_t xfs5152ce_read (struct file *flip, char __user *buf, size_t cnt, loff_t *off)
 {
+	return 0;
 
 }
 
 ssize_t xfs5152ce_write (struct file *flip, const char __user *buf, size_t cnt, loff_t *off)
 {
-
+	return 0;
 }
 
 static int xfs5152ce_release (struct inode *inode, struct file *filp)
 {
-
+	return 0;
 }
 
 static const struct file_operations xfs5152ce_fops={
@@ -158,16 +160,16 @@ FAIL_DEVID:
  */
 static int xfs5152ce_remove(struct spi_device *spi)
 {
-	int ret = 0;
-	/*删除字符设备*/
-	cdev_del(&xfs5152cedev.cdev);
+	xfs5152cedev.priavte_data = NULL;	
 	/*注销设备号*/
 	unregister_chrdev_region(xfs5152cedev.devid,XFS5152CE_CNT);
+	/*删除字符设备*/
+	cdev_del(&xfs5152cedev.cdev);
 	/*摧毁设备节点*/
 	device_destroy(xfs5152cedev.class,xfs5152cedev.devid);
 	/*摧毁类*/
 	class_destroy(xfs5152cedev.class);
-	return ret;
+	return 0;
 	
 }
 
@@ -200,7 +202,7 @@ static struct spi_driver xfs5152ce_driver = {
  * @param 		: 无
  * @return 		: 无
  */
-static int __init xfs5152ce_init(void)
+static int  xfs5152ce_init(void)
 {
 	int ret = 0;
 	ret = spi_register_driver(&xfs5152ce_driver);
@@ -213,10 +215,9 @@ static int __init xfs5152ce_init(void)
  * @param 		: 无
  * @return 		: 无
  */
-static void __exit xfs5152ce_exit(void)
+static void  xfs5152ce_exit(void)
 {
-	spi_unregister_device(&xfs5152ce_driver);
-	
+	spi_unregister_driver(&xfs5152ce_driver);	
 }
 
 module_init(xfs5152ce_init);
