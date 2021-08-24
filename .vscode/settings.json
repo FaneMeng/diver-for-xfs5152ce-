@@ -13,6 +13,7 @@
         "platform_device.h": "c",
         "semaphore.h": "c",
         "timer.h": "c",
-        "device.h": "c"
+        "device.h": "c",
+        "delay.h": "c"
     }
 }
