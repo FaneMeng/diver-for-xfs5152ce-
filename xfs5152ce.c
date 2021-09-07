@@ -52,18 +52,19 @@ struct xfs5152ce_dev{
 	struct device_node *nd;  //设备树父节点
 };
 
-#if 0
+
 static int xfs5152ce_read_regs(struct xfs5152ce_dev *dev, u8 reg, void *buf, int len)
 {
-	u8 data[4] = {XFS_FRAME_HEADER,0x0,0x01,reg};
-/* 	u8 frame_head = XFS_FRAME_HEADER;
+
+ 	u8 frame_head = XFS_FRAME_HEADER;
 	u8 high_wordlen = 0x0;
-	u8 low_wordlen = 0x01; */
+	u8 low_wordlen = 0x01; 
+	u8 data = reg;
 	int ret = 0;
 	struct spi_device *spi = (struct spi_device *)dev->private_data;
 	gpio_set_value(dev->cs_gpio,0);
 	
-	/* spi_write(spi,&frame_head,1);
+	spi_write(spi,&frame_head,1);
 	gpio_set_value(dev->cs_gpio,1);
 	udelay(110);
 	gpio_set_value(dev->cs_gpio,0);
@@ -75,17 +76,21 @@ static int xfs5152ce_read_regs(struct xfs5152ce_dev *dev, u8 reg, void *buf, int
 	gpio_set_value(dev->cs_gpio,1);
 	udelay(110);
 	gpio_set_value(dev->cs_gpio,0);
-	ret = spi_write_then_read(spi,&data,1,buf, 1); */
-	ret = spi_write_then_read(spi,data,4,buf,1);
+	spi_write(spi,&data,1);
 	gpio_set_value(dev->cs_gpio,1);
+	udelay(110);
+	gpio_set_value(dev->cs_gpio,0);
+	spi_read(spi,buf,1);
+	gpio_set_value(dev->cs_gpio,1);
+
 	return ret;
 	
 }
-#endif
 
 
 
 
+#if 0
 /*SPI读寄存器*/
 static int xfs5152ce_read_regs(struct xfs5152ce_dev *dev, u8 reg, void *buf, int len)
 {
@@ -171,6 +176,7 @@ static int xfs5152ce_read_regs(struct xfs5152ce_dev *dev, u8 reg, void *buf, int
 
 	return ret;
 }
+#endif 
 
 
 static struct xfs5152ce_dev xfs5152cedev;  //定义设备描述结构体
